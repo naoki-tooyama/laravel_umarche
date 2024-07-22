@@ -8,7 +8,7 @@ class ComponentTestController extends Controller
 {
     //
     public function showComponent1(){
-        $message = 'メッセージ123';
+        $message = '繝｡繝�繧ｻ繝ｼ繧ｸ123';
         return view('tests.component-test1',
         compact('message'));
     }
