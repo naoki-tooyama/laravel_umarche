@@ -41,20 +41,7 @@
                   </div>
                 </div>
               </section>
-
-                {{--  エロクワント
-                  @foreach ($e_all as $e_owner)
-                    {{$e_owner->name}}
-                    {{$e_owner->created_at->diffForHumans()}}
-                  @endforeach
-                  <br>
-                  クエリビルダ
-                  @foreach ($q_get as $q_owner)
-                    {{$q_owner->name}}
-                    {{Carbon\Carbon::parse($q_owner->created_at)->diffForHumans()}}
-                  @endforeach
-                  <br>--}}
-              </div>
+            </div>
           </div>
       </div>
   </div>
