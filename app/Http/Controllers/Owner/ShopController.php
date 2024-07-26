@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shop;
+use Illuminate\Database\Capsule\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+
 
 class ShopController extends Controller
 {
@@ -43,6 +47,8 @@ class ShopController extends Controller
      */
     public function index()
     {
+        // phpinfo();
+
         // $ownerId = Auth::id();//ログインしているオーナのIDを取得
         $shops = Shop::where('owner_id', Auth::id())->get();
 
@@ -59,8 +65,23 @@ class ShopController extends Controller
     public function update(Request $request, $id){
         $imageFile = $request->image;
         if(!is_null($imageFile) && $imageFile->isValid() ){
-            Storage::putFile('public/shops', $imageFile);
+            // Storage::putFile('public/shops', $imageFile);//リサイズなしの場合
+
+            // dd(storage_path('public\shops'. $imageFile));
+            
+            $fileName = uniqid(rand().'_');
+            $extension = $imageFile->extension();
+            $fileNameToStore = $fileName.'.'.$extension;
+            // dd('public/shops/'.$fileNameToStore);
+
+            //画像のリサイズ
+            $manager = new ImageManager(new Driver());
+            $resizedImage = $manager->read($imageFile);
+            $resizedImage = $resizedImage->resize(1920,1080)->encode();
+    
+            Storage::put('public/shops/'.$fileNameToStore, $resizedImage);
         }
+
         return redirect()->route('owner.shops.index');
     }
 }
