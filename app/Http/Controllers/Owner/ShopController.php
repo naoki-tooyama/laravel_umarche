@@ -8,9 +8,8 @@ use Illuminate\Database\Capsule\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
-
+use App\http\Requests\UploadImageRequest;
+use App\services\ImageService;
 
 class ShopController extends Controller
 {
@@ -62,24 +61,10 @@ class ShopController extends Controller
         return view('owner.shops.edit', compact('shop'));
     }
 
-    public function update(Request $request, $id){
+    public function update(UploadImageRequest $request, $id){
         $imageFile = $request->image;
         if(!is_null($imageFile) && $imageFile->isValid() ){
-            // Storage::putFile('public/shops', $imageFile);//リサイズなしの場合
-
-            // dd(storage_path('public\shops'. $imageFile));
-            
-            $fileName = uniqid(rand().'_');
-            $extension = $imageFile->extension();
-            $fileNameToStore = $fileName.'.'.$extension;
-            // dd('public/shops/'.$fileNameToStore);
-
-            //画像のリサイズ
-            $manager = new ImageManager(new Driver());
-            $resizedImage = $manager->read($imageFile);
-            $resizedImage = $resizedImage->resize(1920,1080)->encode();
-    
-            Storage::put('public/shops/'.$fileNameToStore, $resizedImage);
+            $fileNameToStore = ImageService::upload($imageFile, 'shops');
         }
 
         return redirect()->route('owner.shops.index');
