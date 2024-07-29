@@ -3,9 +3,14 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
-use App\Models\Image;
 use Illuminate\Http\Request;
+use App\Models\Image;
+
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\UploadImageRequest;
+use App\Services\ImageService;
+
+
 
 class ImageController extends Controller
 {
@@ -22,7 +27,7 @@ class ImageController extends Controller
             $id = $request->route()->parameter('image');//shopのid取得
             if(!is_null($id)){
                 $imagesOwnerId = Image::findOrFail($id)->owner->id;
-                $imageId  = (int)$imagesOwnerId;//キャスト　文字列→数値変換
+                $imageId = (int)$imagesOwnerId;//キャスト　文字列→数値変換
                 if($imageId !== Auth::id()){//一致しなかったら
                     abort(404);//404画面表示
                 }
@@ -39,7 +44,7 @@ class ImageController extends Controller
     public function index()
     {
         $images = Image::where('owner_id', Auth::id())
-                ->orderBy('update_at', 'desc')// 降順（小さい順）
+                ->orderBy('updated_at', 'desc')// 降順（小さい順）
                 ->paginate(20);
 
                 return view('owner.images.index',
@@ -53,7 +58,7 @@ class ImageController extends Controller
      */
     public function create()
     {
-        //
+        return view('owner.images.create');
     }
 
     /**
@@ -62,9 +67,34 @@ class ImageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UploadImageRequest $request)
     {
-        //
+        dd($request);
+        $request->validate([
+            'name' => ['required', 'string', 'max:50'],
+            'information' => ['required', 'string', 'max:1000'],
+            'is_selling' => ['required'],
+        ]);
+
+        $imageFile = $request->image;
+        if(!is_null($imageFile) && $imageFile->isValid() ){
+            $fileNameToStore = ImageService::upload($imageFile, 'shops');
+        }
+
+        // $shop = Shop::findOrFail($id);
+        // $shop->name = $request->name;
+        // $shop->information = $request->information;
+        // $shop->is_selling = $request->is_selling;
+
+        // if(!is_null($imageFile) && $imageFile->isValid()){
+        //     $shop->filename = $fileNameToStore;
+        // }
+        // $shop->save();
+
+        return redirect()
+                ->route('owner.shops.index')
+                ->with(['message'=> '店舗情報を更新しました。',
+                        'status' => 'info']);
     }
 
     /**
