@@ -69,17 +69,31 @@ class ImageController extends Controller
      */
     public function store(UploadImageRequest $request)
     {
-        dd($request);
-        $request->validate([
-            'name' => ['required', 'string', 'max:50'],
-            'information' => ['required', 'string', 'max:1000'],
-            'is_selling' => ['required'],
-        ]);
-
-        $imageFile = $request->image;
-        if(!is_null($imageFile) && $imageFile->isValid() ){
-            $fileNameToStore = ImageService::upload($imageFile, 'shops');
+        // dd($request);
+        $imageFiles = $request->file('files');//配列で取得
+        if( !is_null($imageFiles) ){
+            foreach( $imageFiles as $imageFile ){//単数で処理
+                $fileNameToStore = ImageService::upload($imageFile, 'products');
+                Image::create([
+                    'owner_id' => Auth::id(),
+                    'filename' => $fileNameToStore
+                ]);
+            }
         }
+        return redirect()
+        ->route('owner.images.index')
+        ->with(['message'=> '画像登録を実施しました。',
+                'status' => 'info']);
+        // $request->validate([
+        //     'name' => ['required', 'string', 'max:50'],
+        //     'information' => ['required', 'string', 'max:1000'],
+        //     'is_selling' => ['required'],
+        // ]);
+
+        // $imageFile = $request->image;
+        // if(!is_null($imageFile) && $imageFile->isValid() ){
+        //     $fileNameToStore = ImageService::upload($imageFile, 'shops');
+        // }
 
         // $shop = Shop::findOrFail($id);
         // $shop->name = $request->name;
