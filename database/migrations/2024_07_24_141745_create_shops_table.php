@@ -18,7 +18,7 @@ class CreateShopsTable extends Migration
             $table->foreignId('owner_id')
                 ->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('Cascade');
+                ->onDelete('cascade');
             $table->string('name');
             $table->text('information');
             $table->string('filename');

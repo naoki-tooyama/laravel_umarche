@@ -22,8 +22,8 @@ class CreateProductsTable extends Migration
             $table->integer('sort_order')->nullable();
             $table->foreignId('shop_id')
                 ->constrained()
-                ->onUpdate('Cascade')
-                ->onDelete('Cascade');
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreignId('secondary_category_id')
                     ->constrained();
             $table->foreignId('image1')

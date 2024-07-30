@@ -10,6 +10,8 @@ class PrimaryCategory extends Model
 {
     use HasFactory;
 
+    protected $teble = 'primary_categories';
+
     public function secondary(){
         return $this->hasMany(SecondaryCategory::class);
     }

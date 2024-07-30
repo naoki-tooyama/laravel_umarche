@@ -10,6 +10,8 @@ class SecondaryCategory extends Model
 {
     use HasFactory;
 
+    protected $table = 'secondary_categories';
+
     public function primary(){
         return $this->belongsTo(PrimaryCategory::class);
     }

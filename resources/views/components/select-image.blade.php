@@ -25,7 +25,7 @@
                   <img class="image" data-id="{{ $name }}_{{ $image->id }}" 
                     data-file="{{ $image->filename }}" 
                     data-path="{{ asset('storage/products/') }}" 
-                    data-modal="{{ $modal }}" src="{{ asset('storage/products/'.$image->filename)}}" >
+                    data-modal="{{ $modal }}" src="{{ asset('storage/products/' . $image->filename)}}" >
                   <div class="text-gray-700">
                       {{ $image->title }}
                   </div>
