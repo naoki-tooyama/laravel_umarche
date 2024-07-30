@@ -15,15 +15,15 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('information');//->nullable();
+            $table->unsignedInteger('price');//->nullable();
+            $table->boolean('is_selling');//->nullable();
+            $table->integer('sort_order')->nullable();
             $table->foreignId('shop_id')
                 ->constrained()
                 ->onUpdate('Cascade')
                 ->onDelete('Cascade');
-            $table->string('name');
-            $table->text('information')->nullable();
-            $table->unsignedInteger('price')->nullable();
-            $table->boolean('is_selling')->nullable();
-            $table->integer('sort_order')->nullable();
             $table->foreignId('secondary_category_id')
                     ->constrained();
             $table->foreignId('image1')
