@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
+    /**
+     * 新しいUserControllerインスタンスの生成
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:users');
+    }
+
     public function index(){
         $stocks = DB::table( 't_stocks' )
             -> select('product_id', 
@@ -40,5 +50,10 @@ class ItemController extends Controller
         // dd($products);
 
         return view('user.index', compact('products'));
+    }
+
+    public function show($id){
+        $product = Product::findOrFail($id);
+        return view('user.show', compact('product'));
     }
 }
