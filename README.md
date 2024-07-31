@@ -14,3 +14,7 @@ storageフォルダをリンク後、
 storege/app/public/productsフォルダ内に
 保存すると表示されます。
 （productsフォルダがない場合は作成してください。）
+
+店舗の画像を表示する場合は、
+storege/app/public/shopsフォルダを作成し
+画像を保存してください。
