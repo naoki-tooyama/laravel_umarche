@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComponentTestController;
 use App\Http\Controllers\LifeCycleTestController;
-use App\Http\Controllers\user\ItemController;
+use App\Http\Controllers\User\ItemController;
 
 
 /*
